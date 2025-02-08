@@ -31,7 +31,7 @@ find_old_files() {
                 fi
 
                 # addes it to the array(list)
-                if (( last_modification_in_days > DAYS_OLD )); then
+                if (( last_modification_in_days >= DAYS_OLD )); then
                     echo "$FILE"
                 fi
             fi
