@@ -1,0 +1,70 @@
+# Lior Tal Final project Linux
+This project provides a set of scripts for monitoring, backup, and cleanup tasks in a Ubuntu environment. Follow the instructions below to set up and run the scripts.
+
+## Requirements
+- Linux-based system.
+- `cron` service installed for scheduling tasks.
+- Root permissions to install and configure the scripts.
+
+## Installation
+
+1. **Put all scripts in the same directory:**
+   - Place the following scripts in the same directory as `bootstrap.sh`:
+     - `menu.sh`
+     - `monitor.sh`
+     - `backup.sh`
+     - `cleanup.sh`
+
+2. **Run the `bootstrap.sh` script:**
+   - Open a terminal and navigate to the directory containing the scripts.
+   - Run the installation script:
+     `bash`
+     sudo ./bootstrap.sh
+     ```
+   - This will copy all scripts to `/usr/local/bin`, make them executable,
+     and add cron jobs for periodic tasks without overwriting existing cron jobs.
+
+3. **Update your network interface:**
+   - Open the `monitor.sh` script in a text editor.
+   - Update the value of `NET_INTERFACE` to match your system's network interface:
+     ```bash
+     NET_INTERFACE="your-network-interface-name <iface>"
+     ```
+   - You can find your interface name using:
+     `ls /sys/class/net`
+
+
+## Verify Cron Jobs
+To verify that the cron jobs have been added:
+1. Open your crontab file:
+   `sudo crontab -e`
+2. List all active cron jobs:
+    ## copy the this code to you cron :
+    The cron jobs should look like this:
+    `Copy this code`
+    0 * * * * /usr/local/bin/monitor.sh
+    0 2 4,20 * * /usr/local/bin/backup.sh
+    0 3 1 * * /usr/local/bin/cleanup.sh
+3. check if crontab:
+    crontab -l
+
+## running the scripts:
+1. Run the Scripts Manually:
+    - Run the `-menu.sh` script:
+    ` sudo /usr/local/bin/menu.sh`
+
+    - Run Monitor script:
+     `sudo /usr/local/bin/monitor.sh`
+
+    - Run backup script:
+      `sudo /usr/local/bin/backup.sh `
+
+    - Run cleanup script:
+      `sudo /usr/local/bin/cleanup.sh`
+
+
+
+
+
+
+

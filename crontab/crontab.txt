@@ -1,0 +1,13 @@
+# Final Project Lior Tal Crontab file
+# sudo crontab -e to edit cron
+# sudo crontab -l to check if crontab are existing in root usr
+
+
+# Run monitor.sh every hour
+0 * * * * /usr/local/bin/monitor.sh
+
+# Run backup.sh on the 4th and 20th of each month at 02:00
+0 2 4,20 * * /usr/local/bin/backup.sh
+
+# Run cleanup.sh on the first day of each month at 03:00
+0 3 1 * * /usr/local/bin/cleanup.sh
