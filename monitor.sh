@@ -54,21 +54,23 @@ for NET_INTERFACE_PATH in /sys/class/net/*; do
             TX_BYTES=$((TX_BYTES + TX_CURR))
 
         #if the interface is virtual (not a symlink)
-        elif [[ ! -L "/sys/devices/virtual/net/$INTERFACE_NAME" ]]; then
-            echo "Network interface '$INTERFACE_NAME' is virtual (not physical)."
+        #elif [[ ! -L "/sys/devices/virtual/net/$INTERFACE_NAME" ]]; then
+        #    echo "Network interface '$INTERFACE_NAME' is virtual (not physical)."
 
-        else
+        #else
             # Fallback if interface not found or not physical
-            echo "Warning: Network interface $INTERFACE_NAME not found."
+        #    echo "Warning: Network interface $INTERFACE_NAME not found."
         fi
 done
 
+if [[ "$IS_INTERACTIVE" == false ]]; then
+    # For log line /var/log/monitor.log
+    CURRENT_TIME="$(date)"
+    # Format:     [date]         cpu%       mem%        rx       tx
+    LOG_LINE="[$CURRENT_TIME] $CPU_USAGE $MEM_USAGE $RX_BYTES $TX_BYTES"
+    echo "$LOG_LINE" >> "$LOG_FILE"
+fi
 
-# For log line /var/log/monitor.log
-CURRENT_TIME="$(date)"
-# Format:     [date]         cpu%       mem%        rx       tx
-LOG_LINE="[$CURRENT_TIME] $CPU_USAGE $MEM_USAGE $RX_BYTES $TX_BYTES"
-echo "$LOG_LINE" >> "$LOG_FILE"
 
 
 # If interactive, show current measurement and compare with previous
