@@ -76,14 +76,19 @@ fi
 # If interactive, show current measurement and compare with previous
 if [[ "$IS_INTERACTIVE" == true ]]; then
 
+      if [[ ! -s "$LOG_FILE" ]]; then
+        # Display trend info if the log is empty
+        echo "Current system metrics:"
+        echo "CPU usage: current - ${CPU_USAGE}%"
+        echo "Memory usage: current - ${MEM_USAGE}%"
+        echo "Tx/Rx bytes: $TX_BYTES/$RX_BYTES"
+        exit 0
+    fi
     # get the previous entry from log
     # taking the second to last line from the log
     PREV_LINE=$(tail -2 "$LOG_FILE" | head -1)
 
-    if [[ -z "$PREV_LINE" ]] || [[ "$PREV_LINE" == "$LOG_LINE" ]]; then
-        echo "No previous measurement found."
-        exit 0
-    fi
+    
 
     # Extract the part after the ']' to isolate: cpu% mem% rx tx
     PREV_VALUES=$(echo "$PREV_LINE" | cut -d ']' -f2)
