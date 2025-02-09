@@ -91,7 +91,7 @@ if [[ "$IS_INTERACTIVE" == true ]]; then
     
 
     # Extract the part after the ']' to isolate: cpu% mem% rx tx
-    PREV_VALUES=$(echo "$PREV_LINE" | cut -d ']' -f2)
+    PREV_VALUES=$(echo "$PREV_LINE" | cut -d ']' -f 2)
 
     # Split the values (e.g. " 3 71.3 56598489 15940903")
     PREV_CPU=$(echo "$PREV_VALUES" | awk '{print $1}')
