@@ -73,8 +73,9 @@ tar -czf "$ARCHIVE_PATH" --ignore-failed-read /home 2>/dev/null
 
 # if no code error
 if [[ $? -eq 0 ]]; then
-    log_msg "Backup success: $ARCHIVE_NAME (size: $(du -sh "$ARCHIVE_PATH" | awk '{print $1}'))"
-    $IS_INTERACTIVE && echo "Backup created at: $ARCHIVE_PATH"
+    ARCHIVE_PATH_SIZE=$(du -sh "$ARCHIVE_PATH" | awk '{print $1}')
+    log_msg "Backup success: $ARCHIVE_NAME (size: $ARCHIVE_PATH_SIZE)"
+    $IS_INTERACTIVE && echo "Backup created at: $ARCHIVE_PATH (size: $ARCHIVE_PATH_SIZE)" 
 else
     log_msg "Backup failed for $ARCHIVE_PATH"
     $IS_INTERACTIVE && echo "Backup failed."
