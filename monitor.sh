@@ -52,14 +52,6 @@ for NET_INTERFACE_PATH in /sys/class/net/*; do
             TX_CURR=$(cat /sys/class/net/"$INTERFACE_NAME"/statistics/tx_bytes 2>/dev/null)
             RX_BYTES=$((RX_BYTES + RX_CURR))
             TX_BYTES=$((TX_BYTES + TX_CURR))
-
-        #if the interface is virtual (not a symlink)
-        #elif [[ ! -L "/sys/devices/virtual/net/$INTERFACE_NAME" ]]; then
-        #    echo "Network interface '$INTERFACE_NAME' is virtual (not physical)."
-
-        #else
-            # Fallback if interface not found or not physical
-        #    echo "Warning: Network interface $INTERFACE_NAME not found."
         fi
 done
 
@@ -71,7 +63,7 @@ if [[ "$IS_INTERACTIVE" == false ]]; then
     echo "$LOG_LINE" >> "$LOG_FILE"
 fi
 
-
+#[Sun 12 Jan 2025 19:21:36 IST] 1 23.2 672117313 2724579
 
 # If interactive, show current measurement and compare with previous
 if [[ "$IS_INTERACTIVE" == true ]]; then
@@ -84,18 +76,13 @@ if [[ "$IS_INTERACTIVE" == true ]]; then
         echo "Tx/Rx bytes: $TX_BYTES/$RX_BYTES"
         exit 0
     fi
-    # get the previous entry from log
-    # taking the second to last line from the log
-    PREV_LINE=$(tail -2 "$LOG_FILE" | head -1)
-
     
-
-    # Extract the part after the ']' to isolate: cpu% mem% rx tx
-    PREV_VALUES=$(echo "$PREV_LINE" | cut -d ']' -f 2)
-
-    # Split the values (e.g. " 3 71.3 56598489 15940903")
-    PREV_CPU=$(echo "$PREV_VALUES" | awk '{print $1}')
-    PREV_MEM=$(echo "$PREV_VALUES" | awk '{print $2}')
+    # taking the last line of the log file and splitting it into an array
+    read -r -a LAST_LOG_LINE <<<"$(tail -1 "$LOG_FILE" | cut -d ']' -f 2)"
+    #last cpu usage
+    PREV_CPU="${LAST_LOG_LINE[0]}"
+    #last memory usage
+    PREV_MEM="${LAST_LOG_LINE[1]}"
 
     # Compare CPU usage
     CPU_DIFF=$(awk -v curr="$CPU_USAGE" -v prev="$PREV_CPU" 'BEGIN { printf "%.1f", curr - prev }')
