@@ -32,7 +32,8 @@ CPU_USAGE=$((100 - CPU_USAGE))
 
 # Get Memory usage in %
 # free -b provides memory values in bytes
-read -r MEM_TOTAL MEM_USED <<<"$(free -b | awk '/Mem:/ {print $2, $3}')"
+read -r MEM_TOTAL MEM_USED <<<"$(free -b | sed -n '2p' |  awk '{print $2, $3}')"
+
 # Calculate percentage with awk:
 MEM_USAGE=$(awk -v used="$MEM_USED" -v total="$MEM_TOTAL" 'BEGIN {
   if (total == 0) { print 0 }
